@@ -1,0 +1,22 @@
+<div class="container-fluid" data-controller="example-element">
+  <a
+    class="btn btn-sm btn-primary"
+    href="1"
+    data-action="click->example-element#show">
+    Show
+  </a>
+
+  <%= link_to "2",
+        class: 'btn btn-sm btn-danger',
+        data: { action: "click->example-element#hide" } do %>
+    Hide
+  <% end %>
+
+  <ul class="list-group d-none" id="example-element-list">
+    <li class="list-group-item">An item</li>
+    <li class="list-group-item">A second item</li>
+    <li class="list-group-item">A third item</li>
+    <li class="list-group-item">A fourth item</li>
+    <li class="list-group-item">And a fifth one</li>
+  </ul>
+</div>

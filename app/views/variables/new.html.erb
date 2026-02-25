@@ -1,0 +1,11 @@
+<% content_for :title, "New variable" %>
+
+<h1>New variable</h1>
+
+<%= render "form", variable: @variable %>
+
+<br>
+
+<div>
+  <%= link_to "Back to variables", variables_path %>
+</div>

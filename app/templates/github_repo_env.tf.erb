@@ -1,0 +1,15 @@
+resource "github_repository_environment" "<%= @repo_short_name %>_<%= @env_name %>" {
+  environment = "<%= @env_name %>"
+  repository  = "<%= @repo_short_name %>"
+
+  deployment_branch_policy {
+    protected_branches     = false
+    custom_branch_policies = true
+  }
+}
+
+resource "github_repository_environment_deployment_policy" "<%= @repo_short_name %>_<%= @env_name %>_deployment_policy" {
+  repository     = "<%= @repo_short_name %>"
+  environment    = "<%= @env_name %>"
+  branch_pattern = "<%= @env_name %>"
+}

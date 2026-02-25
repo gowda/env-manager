@@ -1,0 +1,60 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Variables" %>
+
+<h1>Variables</h1>
+
+<%= link_to 'Add variable', new_variable_path, class: 'btn btn-primary float-end mb-3' %>
+
+<button data-action="click->delete-variable-confirmation#show">Test Show Modal</button>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th>Type</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @variables.each do |variable| %>
+      <tr class="clickable-row" data-href="<%= variable_path(variable) %>">
+        <td><%= variable.key %></td>
+        <td><%= variable.value.truncate(50) %></td> <%# Truncate long values for display %>
+        <td><%= variable.type %></td>
+        <td>
+          <%= link_to edit_variable_path(variable), class: 'btn btn-sm btn-outline-primary' do %>
+            <i class="bi bi-pencil"></i>
+          <% end %>
+          <!--
+          <%= button_tag variable_path(variable),
+                class: 'btn btn-sm btn-outline-danger',
+                data: { action: "click->delete-variable-confirmation#show" } do %>
+            <i class="bi bi-trash"></i>
+          <% end %>
+          -->
+          <%= render 'delete_button', path: variable_path(variable) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @variables %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.clickable-row').forEach(function(row) {
+      row.addEventListener('click', function(event) {
+        console.log("Handling click on the row")
+        if (!event.target.closest('a')) { // Avoid triggering on Edit/Delete clicks
+          console.log("Did not find an action button, going ahead with show page")
+          window.location.href = row.dataset.href;
+        } else {
+          console.log("Found an action button, won't process to show page")
+        }
+      });
+    });
+  });
+</script>

@@ -4,5 +4,11 @@
 
 import { application } from "./application"
 
+import DeleteVariableConfirmationController from "./delete_variable_confirmation_controller"
+application.register("delete-variable-confirmation", DeleteVariableConfirmationController)
+
+import ExampleElementController from "./example_element_controller"
+application.register("example-element", ExampleElementController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)

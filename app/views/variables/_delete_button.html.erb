@@ -1,0 +1,9 @@
+<div data-controller="delete-variable-confirmation" data-delete-variable-confirmation-url-value="<%= path %>">
+  <%= render 'delete_confirmation_dialog' %>
+
+  <%= link_to path,
+        class: 'btn btn-sm btn-outline-danger',
+        data: { action: "click->delete-variable-confirmation#show", turbo: false } do %>
+    <i class="bi bi-trash"></i>
+  <% end %>
+</div>
