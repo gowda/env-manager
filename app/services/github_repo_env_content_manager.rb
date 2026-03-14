@@ -45,7 +45,7 @@ class GithubRepoEnvContentManager
 
     # Process secrets
     secrets.each_with_index do |item, idx|
-      key, value = [ item[:key], item[:value] ]
+      key, value = [item[:key], item[:value]]
       next unless valid_item?(key, value, :secret)
 
       begin
@@ -58,7 +58,7 @@ class GithubRepoEnvContentManager
 
     # Process variables
     variables.each_with_index do |item, idx|
-      key, value = [ item[:key], item[:value] ]
+      key, value = [item[:key], item[:value]]
       next unless valid_item?(key, value, :variable)
 
       begin

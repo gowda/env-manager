@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><%= @app.name %> Environments</h1>
+  <%= link_to "New App Environment", new_app_app_env_path(@app), class: "btn btn-primary" %>
+</div>
+
+<div class="list-group">
+  <% @app_envs.each do |app_env| %>
+    <%= link_to app_env.name, app_app_env_path(@app, app_env), class: "list-group-item list-group-item-action" %>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+<%= form_with model: [app, app_env] do |f| %>
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.select :name, AppEnv::NAMES, {}, class: "form-select" %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

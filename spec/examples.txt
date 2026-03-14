@@ -1,3 +1,7 @@
-example_id                                | status | run_time        |
------------------------------------------ | ------ | --------------- |
-./spec/requests/health_check_spec.rb[1:1] | passed | 0.02541 seconds |
+example_id                                 | status | run_time        |
+------------------------------------------ | ------ | --------------- |
+./spec/requests/app_envs_spec.rb[1:1:1]    | passed | 0.0216 seconds  |
+./spec/requests/apps_spec.rb[1:1:1]        | passed | 0.0164 seconds  |
+./spec/requests/apps_spec.rb[1:2:1]        | passed | 0.07107 seconds |
+./spec/requests/env_configs_spec.rb[1:1:1] | passed | 0.01568 seconds |
+./spec/requests/health_check_spec.rb[1:1]  | passed | 0.0041 seconds  |

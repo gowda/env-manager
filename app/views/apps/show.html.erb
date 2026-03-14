@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><%= @app.name %></h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Edit", edit_app_path(@app), class: "btn btn-outline-primary" %>
+    <%= link_to "Delete", app_path(@app), data: { turbo_method: :delete, turbo_confirm: "Delete this app?" }, class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p class="mb-2"><strong>Description:</strong> <%= @app.description.presence || "-" %></p>
+    <p class="mb-2"><strong>GitHub Repository:</strong> <%= @app.github_repository %></p>
+    <p class="mb-0"><strong>URL:</strong> <%= @app.url.presence || "-" %></p>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">App Environments</h2>
+  <%= link_to "Add App Environment", new_app_app_env_path(@app), class: "btn btn-primary" %>
+</div>
+
+<div class="list-group">
+  <% @app.app_envs.order(:name).each do |app_env| %>
+    <%= link_to app_env.name, app_app_env_path(@app, app_env), class: "list-group-item list-group-item-action" %>
+  <% end %>
+</div>

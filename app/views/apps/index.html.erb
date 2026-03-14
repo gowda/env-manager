@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Apps</h1>
+  <%= link_to "New App", new_app_path, class: "btn btn-primary" %>
+</div>
+
+<div class="list-group">
+  <% @apps.each do |app| %>
+    <%= link_to app.name, app_path(app), class: "list-group-item list-group-item-action" %>
+  <% end %>
+</div>

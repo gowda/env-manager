@@ -1,5 +1,5 @@
 class VariablesController < ApplicationController
-  before_action :set_variable, only: %i[ show edit update destroy ]
+  before_action :set_variable, only: %i[show edit update destroy]
 
   # GET /variables or /variables.json
   def index
@@ -65,6 +65,6 @@ class VariablesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def variable_params
-      params.expect(variable: [ :key, :value, :type ])
+      params.expect(variable: [:key, :value, :type])
     end
 end

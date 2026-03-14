@@ -2,7 +2,7 @@
 
 namespace :github do
   desc "Generate repository environment terraform config"
-  task :generate_repo_env_tf, [ :repo_name, :env_name ] => :environment do |t, args|
+  task :generate_repo_env_tf, [:repo_name, :env_name] => :environment do |t, args|
     repo_name = args[:repo_name]
     env_name = args[:env_name]
     unless repo_name && env_name
@@ -15,7 +15,7 @@ namespace :github do
   end
 
   desc "Sync repository environment secrets and variables"
-  task :sync_repo_env, [ :repo_name, :env_name ] => :environment do |t, args|
+  task :sync_repo_env, [:repo_name, :env_name] => :environment do |t, args|
     repo_name = args[:repo_name]
     env_name = args[:env_name]
 
