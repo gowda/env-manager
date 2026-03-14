@@ -41,5 +41,13 @@ module EnvManager
     config.generators do |g|
       g.test_framework :rspec, fixture: false
     end
+
+    initializer "env_manager.turbo_integration_test_request_encoding", before: "turbo.integration_test_request_encoding" do
+      ActiveSupport.on_load(:action_dispatch_integration_test) do
+        if defined?(ActionDispatch::RequestEncoder::TurboStreamEncoder)
+          ActionDispatch::RequestEncoder.send(:remove_const, :TurboStreamEncoder)
+        end
+      end
+    end
   end
 end

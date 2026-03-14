@@ -5,6 +5,7 @@ class EnvConfig < ApplicationRecord
     build_environment].freeze
 
   belongs_to :app_env
+  has_many :environment_variables, dependent: :destroy
 
   validates :kind, presence: true, inclusion: { in: KINDS }, uniqueness: { scope: :app_env_id }
 end

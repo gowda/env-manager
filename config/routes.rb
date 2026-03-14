@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   resources :apps do
     resources :app_envs do
-      resources :env_configs
+      resources :env_configs do
+        resources :environment_variables
+      end
     end
   end
 

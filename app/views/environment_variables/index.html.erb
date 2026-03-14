@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Environment Variables</h1>
+  <%= link_to "New Environment Variable", new_app_app_env_env_config_environment_variable_path(@app, @app_env, @env_config), class: "btn btn-primary" %>
+</div>
+
+<div class="list-group">
+  <% @environment_variables.each do |environment_variable| %>
+    <%= link_to environment_variable.key, app_app_env_env_config_environment_variable_path(@app, @app_env, @env_config, environment_variable), class: "list-group-item list-group-item-action" %>
+  <% end %>
+</div>

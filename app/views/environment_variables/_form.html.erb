@@ -1,0 +1,25 @@
+<%= form_with model: [app, app_env, env_config, environment_variable] do |f| %>
+  <div class="mb-3">
+    <%= f.label :key, class: "form-label" %>
+    <%= f.text_field :key, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :value_type, class: "form-label" %>
+    <%= f.select :value_type, EnvironmentVariable::VALUE_TYPES, { selected: (environment_variable.value_type.presence || "single_line") }, class: "form-select" %>
+  </div>
+
+  <% if environment_variable.value_type == "secret" %>
+    <div class="mb-3">
+      <%= f.label :value, class: "form-label" %>
+      <%= f.password_field :value, class: "form-control" %>
+    </div>
+  <% else %>
+    <div class="mb-3">
+      <%= f.label :value, class: "form-label" %>
+      <%= f.text_area :value, rows: 5, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>
