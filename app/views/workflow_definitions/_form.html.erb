@@ -1,0 +1,13 @@
+<%= form_with model: [app, app_env, env_config, workflow_definition] do |f| %>
+  <div class="mb-3">
+    <%= f.label :kind, class: "form-label" %>
+    <%= f.select :kind, WorkflowDefinition::KINDS, {}, class: "form-select" %>
+  </div>
+
+  <div class="form-check mb-3">
+    <%= f.check_box :enabled, class: "form-check-input" %>
+    <%= f.label :enabled, class: "form-check-label" %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

@@ -1,0 +1,17 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Workflow Definitions</h1>
+  <%= link_to "New Workflow Definition", new_app_app_env_env_config_workflow_definition_path(@app, @app_env, @env_config), class: "btn btn-primary" %>
+</div>
+
+<div class="list-group">
+  <% @workflow_definitions.each do |workflow_definition| %>
+    <div class="list-group-item">
+      <div><strong><%= workflow_definition.kind %></strong></div>
+      <div><strong>Enabled:</strong> <%= workflow_definition.enabled ? "yes" : "no" %></div>
+      <div class="mt-2 d-flex gap-2">
+        <%= link_to "Edit", edit_app_app_env_env_config_workflow_definition_path(@app, @app_env, @env_config, workflow_definition), class: "btn btn-outline-primary btn-sm" %>
+        <%= link_to "Delete", app_app_env_env_config_workflow_definition_path(@app, @app_env, @env_config, workflow_definition), data: { turbo_method: :delete, turbo_confirm: "Delete this workflow definition?" }, class: "btn btn-outline-danger btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+</div>

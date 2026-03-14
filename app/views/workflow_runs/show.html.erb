@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Workflow Run #<%= @workflow_run.id %></h1>
+  <%= link_to "Back", app_app_env_env_config_workflow_runs_path(@app, @app_env, @env_config), class: "btn btn-outline-secondary" %>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p class="mb-2"><strong>Definition:</strong> <%= @workflow_run.workflow_definition.kind %></p>
+    <p class="mb-2"><strong>Status:</strong> <%= @workflow_run.status %></p>
+    <p class="mb-2"><strong>Trigger:</strong> <%= @workflow_run.trigger_source %></p>
+    <p class="mb-0"><strong>Error:</strong> <%= @workflow_run.error_message.presence || "-" %></p>
+  </div>
+</div>
+
+<h2 class="h5">Steps</h2>
+<div class="list-group">
+  <% @workflow_run.workflow_run_steps.order(:id).each do |step| %>
+    <div class="list-group-item">
+      <div><strong><%= step.name %></strong></div>
+      <div><strong>Status:</strong> <%= step.status %></div>
+      <div><strong>Error:</strong> <%= step.error_message.presence || "-" %></div>
+    </div>
+  <% end %>
+</div>

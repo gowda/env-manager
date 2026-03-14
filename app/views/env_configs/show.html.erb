@@ -13,6 +13,11 @@
   </div>
 </div>
 
+<div class="d-flex gap-2 mt-3">
+  <%= link_to "Workflow Definitions", app_app_env_env_config_workflow_definitions_path(@app, @app_env, @env_config), class: "btn btn-outline-primary" %>
+  <%= link_to "Workflow Runs", app_app_env_env_config_workflow_runs_path(@app, @app_env, @env_config), class: "btn btn-outline-secondary" %>
+</div>
+
 <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
   <h2 class="h5 mb-0">Environment Variables</h2>
   <div class="d-flex gap-2">

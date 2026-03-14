@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_14_134200) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_14_141200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -98,6 +98,45 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_134200) do
     t.string "value"
   end
 
+  create_table "workflow_definitions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: true, null: false
+    t.bigint "env_config_id", null: false
+    t.string "kind", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "updated_at", null: false
+    t.index ["env_config_id", "kind"], name: "index_workflow_definitions_on_env_config_id_and_kind"
+    t.index ["env_config_id"], name: "index_workflow_definitions_on_env_config_id"
+  end
+
+  create_table "workflow_run_steps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "error_message"
+    t.jsonb "metadata", default: {}, null: false
+    t.string "name", null: false
+    t.string "status", default: "queued", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "workflow_run_id", null: false
+    t.index ["workflow_run_id", "name"], name: "index_workflow_run_steps_on_workflow_run_id_and_name"
+    t.index ["workflow_run_id"], name: "index_workflow_run_steps_on_workflow_run_id"
+  end
+
+  create_table "workflow_runs", force: :cascade do |t|
+    t.bigint "change_set_id"
+    t.datetime "created_at", null: false
+    t.bigint "env_config_id", null: false
+    t.text "error_message"
+    t.jsonb "metadata", default: {}, null: false
+    t.string "status", default: "queued", null: false
+    t.string "trigger_source", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "workflow_definition_id", null: false
+    t.index ["change_set_id"], name: "index_workflow_runs_on_change_set_id"
+    t.index ["env_config_id", "created_at"], name: "index_workflow_runs_on_env_config_id_and_created_at"
+    t.index ["env_config_id"], name: "index_workflow_runs_on_env_config_id"
+    t.index ["workflow_definition_id"], name: "index_workflow_runs_on_workflow_definition_id"
+  end
+
   add_foreign_key "app_envs", "apps"
   add_foreign_key "audit_events", "change_sets"
   add_foreign_key "audit_events", "env_configs"
@@ -105,4 +144,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_134200) do
   add_foreign_key "change_sets", "env_configs"
   add_foreign_key "env_configs", "app_envs"
   add_foreign_key "environment_variables", "env_configs"
+  add_foreign_key "workflow_definitions", "env_configs"
+  add_foreign_key "workflow_run_steps", "workflow_runs"
+  add_foreign_key "workflow_runs", "change_sets"
+  add_foreign_key "workflow_runs", "env_configs"
+  add_foreign_key "workflow_runs", "workflow_definitions"
 end

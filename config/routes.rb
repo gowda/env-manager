@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :app_envs do
       resources :env_configs do
         resources :environment_variables
+        resources :workflow_definitions, except: [:show]
+        resources :workflow_runs, only: [:index, :show]
         resource :batch_changes, only: [:new, :create], controller: "env_config_batch_changes"
       end
     end

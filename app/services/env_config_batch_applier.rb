@@ -20,6 +20,7 @@ class EnvConfigBatchApplier
     raise ArgumentError, "Reason is required" if reason.strip.empty?
 
     result_items = []
+    change_set = nil
 
     ActiveRecord::Base.transaction do
       change_set = env_config.change_sets.create!(reason: reason, status: "applied")
@@ -50,6 +51,12 @@ class EnvConfigBatchApplier
           updated: result_items.count { |item| item[:operation] == "update" },
           deleted: result_items.count { |item| item[:operation] == "delete" }
         }
+      )
+
+      WorkflowTriggerService.call(
+        env_config: env_config,
+        trigger_source: "batch_change",
+        change_set: change_set
       )
     end
 

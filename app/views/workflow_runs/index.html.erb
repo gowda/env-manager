@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Workflow Runs</h1>
+  <%= link_to "Workflow Definitions", app_app_env_env_config_workflow_definitions_path(@app, @app_env, @env_config), class: "btn btn-outline-primary" %>
+</div>
+
+<div class="list-group">
+  <% @workflow_runs.each do |workflow_run| %>
+    <%= link_to app_app_env_env_config_workflow_run_path(@app, @app_env, @env_config, workflow_run), class: "list-group-item list-group-item-action" do %>
+      <div><strong><%= workflow_run.workflow_definition.kind %></strong></div>
+      <div><strong>Status:</strong> <%= workflow_run.status %></div>
+      <div><strong>Trigger:</strong> <%= workflow_run.trigger_source %></div>
+      <div><strong>At:</strong> <%= workflow_run.created_at %></div>
+    <% end %>
+  <% end %>
+</div>
