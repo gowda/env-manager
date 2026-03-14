@@ -16,7 +16,7 @@ on:
       - main
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: ${{ github.repository }}-deploy-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
