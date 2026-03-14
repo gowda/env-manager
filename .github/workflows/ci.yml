@@ -38,7 +38,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          version: 3.4.8
 
       - name: Prepare database
         run: bin/rails db:prepare
@@ -67,7 +66,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          version: 3.4.8
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -87,7 +85,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          version: 3.4.8
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v4
