@@ -46,6 +46,9 @@ jobs:
       - name: Prepare database
         run: bin/rails db:prepare
 
+      - name: Precompile assets
+        run: SECRET_KEY_BASE_DUMMY=1 SKIP_YARN_INSTALL=1 ./bin/rails assets:precompile
+
       - name: Run test suite
         run: bundle exec rspec
 
