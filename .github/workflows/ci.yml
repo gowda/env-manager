@@ -45,6 +45,16 @@ jobs:
       - name: Run test suite
         run: bundle exec rspec
 
+  build_image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Build application image
+        run: docker build --build-arg RUBY_VERSION=$(cat .ruby-version) -t env-manager:test .
+
   scan_ruby:
     runs-on: ubuntu-latest
 
