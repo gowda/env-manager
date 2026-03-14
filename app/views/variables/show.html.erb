@@ -1,8 +1,0 @@
-<h1>Variable Details</h1>
-
-<p><strong>Key:</strong> <%= @variable.key %></p>
-<p><strong>Value:</strong> <pre><%= @variable.value %></pre></p> <%# Use pre for multi-line preservation %>
-<p><strong>Type:</strong> <%= @variable.type %></p>
-
-<%= link_to 'Edit', edit_variable_path(@variable), class: 'btn btn-primary' %> |
-<%= link_to 'Back to list', variables_path, class: 'btn btn-secondary' %>
