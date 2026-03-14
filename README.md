@@ -1,24 +1,33 @@
-# README
+# Env Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Runtime
 
-Things you may want to cover:
+1. Ruby `3.4.8`
+2. Rails `8.1.2`
+3. PostgreSQL
 
-* Ruby version
+## Local Setup
 
-* System dependencies
+1. `bundle install`
+2. `yarn install`
+3. `bundle exec rails db:prepare`
+4. `bin/dev`
 
-* Configuration
+## Database Configuration
 
-* Database creation
+1. `DB_HOST` (default `127.0.0.1`)
+2. `DB_PORT` (default `5432`)
+3. `DB_USERNAME` (default current shell user)
+4. `DB_PASSWORD` (optional)
+5. `DB_NAME_DEVELOPMENT` (default `env_manager_development`)
+6. `DB_NAME_TEST` (default `env_manager_test`)
 
-* Database initialization
+## Testing
 
-* How to run the test suite
+1. `bundle exec rspec`
 
-* Services (job queues, cache servers, search engines, etc.)
+## CI
 
-* Deployment instructions
-
-* ...
+1. Test job runs RSpec against PostgreSQL.
+2. Lint job runs RuboCop.
+3. Security job runs Brakeman and bundler-audit.
