@@ -44,6 +44,9 @@ gem "image_processing", "~> 1.2"
 gem "dotenv"
 gem "octokit"
 gem "rbnacl"
+gem "aws-sdk-s3"
+gem "aws-sdk-ecs"
+gem "faraday-retry"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

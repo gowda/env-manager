@@ -1,4 +1,14 @@
 <%= form_with model: [app, app_env, env_config, workflow_definition] do |f| %>
+  <% if workflow_definition.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% workflow_definition.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div class="mb-3">
     <%= f.label :kind, class: "form-label" %>
     <%= f.select :kind, WorkflowDefinition::KINDS, {}, class: "form-select" %>
@@ -7,6 +17,11 @@
   <div class="form-check mb-3">
     <%= f.check_box :enabled, class: "form-check-input" %>
     <%= f.label :enabled, class: "form-check-label" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :metadata_json, "Metadata (JSON)", class: "form-label" %>
+    <%= f.text_area :metadata_json, value: metadata_json, rows: 12, class: "form-control" %>
   </div>
 
   <%= f.submit class: "btn btn-primary" %>

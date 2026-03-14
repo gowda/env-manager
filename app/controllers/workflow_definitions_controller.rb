@@ -10,9 +10,11 @@ class WorkflowDefinitionsController < ApplicationController
 
   def new
     @workflow_definition = @env_config.workflow_definitions.new
+    @metadata_json = "{}"
   end
 
   def edit
+    @metadata_json = JSON.pretty_generate(@workflow_definition.metadata || {})
   end
 
   def create
@@ -21,16 +23,27 @@ class WorkflowDefinitionsController < ApplicationController
     if @workflow_definition.save
       redirect_to app_app_env_env_config_workflow_definitions_path(@app, @app_env, @env_config), notice: "Workflow definition was successfully created."
     else
+      @metadata_json = params.dig(:workflow_definition, :metadata_json).to_s
       render :new, status: :unprocessable_content
     end
+  rescue JSON::ParserError
+    @workflow_definition = @env_config.workflow_definitions.new
+    @workflow_definition.errors.add(:metadata, "must be valid JSON")
+    @metadata_json = params.dig(:workflow_definition, :metadata_json).to_s
+    render :new, status: :unprocessable_content
   end
 
   def update
     if @workflow_definition.update(workflow_definition_params)
       redirect_to app_app_env_env_config_workflow_definitions_path(@app, @app_env, @env_config), notice: "Workflow definition was successfully updated."
     else
+      @metadata_json = params.dig(:workflow_definition, :metadata_json).to_s
       render :edit, status: :unprocessable_content
     end
+  rescue JSON::ParserError
+    @workflow_definition.errors.add(:metadata, "must be valid JSON")
+    @metadata_json = params.dig(:workflow_definition, :metadata_json).to_s
+    render :edit, status: :unprocessable_content
   end
 
   def destroy
@@ -57,6 +70,15 @@ class WorkflowDefinitionsController < ApplicationController
   end
 
   def workflow_definition_params
-    params.expect(workflow_definition: [:kind, :enabled])
+    raw = params.expect(workflow_definition: [:kind, :enabled, :metadata_json]).to_h
+    metadata_json = raw.delete("metadata_json").to_s
+    raw["metadata"] = parse_metadata_json(metadata_json)
+    raw
+  end
+
+  def parse_metadata_json(metadata_json)
+    return {} if metadata_json.strip.empty?
+
+    JSON.parse(metadata_json)
   end
 end
