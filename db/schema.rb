@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_14_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_14_134200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,6 +31,42 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_130000) do
     t.datetime "updated_at", null: false
     t.string "url"
     t.index ["name"], name: "index_apps_on_name", unique: true
+  end
+
+  create_table "audit_events", force: :cascade do |t|
+    t.string "action", null: false
+    t.bigint "change_set_id"
+    t.datetime "created_at", null: false
+    t.bigint "env_config_id", null: false
+    t.string "message", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "updated_at", null: false
+    t.index ["change_set_id"], name: "index_audit_events_on_change_set_id"
+    t.index ["env_config_id", "created_at"], name: "index_audit_events_on_env_config_id_and_created_at"
+    t.index ["env_config_id"], name: "index_audit_events_on_env_config_id"
+  end
+
+  create_table "change_entries", force: :cascade do |t|
+    t.bigint "change_set_id", null: false
+    t.datetime "created_at", null: false
+    t.string "key", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.string "new_value_type"
+    t.string "operation", null: false
+    t.string "previous_value_type"
+    t.boolean "secret", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["change_set_id", "key"], name: "index_change_entries_on_change_set_id_and_key"
+    t.index ["change_set_id"], name: "index_change_entries_on_change_set_id"
+  end
+
+  create_table "change_sets", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "env_config_id", null: false
+    t.text "reason", null: false
+    t.string "status", default: "applied", null: false
+    t.datetime "updated_at", null: false
+    t.index ["env_config_id"], name: "index_change_sets_on_env_config_id"
   end
 
   create_table "env_configs", force: :cascade do |t|
@@ -63,6 +99,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_130000) do
   end
 
   add_foreign_key "app_envs", "apps"
+  add_foreign_key "audit_events", "change_sets"
+  add_foreign_key "audit_events", "env_configs"
+  add_foreign_key "change_entries", "change_sets"
+  add_foreign_key "change_sets", "env_configs"
   add_foreign_key "env_configs", "app_envs"
   add_foreign_key "environment_variables", "env_configs"
 end

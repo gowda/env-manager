@@ -15,11 +15,38 @@
 
 <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
   <h2 class="h5 mb-0">Environment Variables</h2>
-  <%= link_to "Add Environment Variable", new_app_app_env_env_config_environment_variable_path(@app, @app_env, @env_config), class: "btn btn-primary" %>
+  <div class="d-flex gap-2">
+    <%= link_to "Batch Changes", new_app_app_env_env_config_batch_changes_path(@app, @app_env, @env_config), class: "btn btn-outline-primary" %>
+    <%= link_to "Add Environment Variable", new_app_app_env_env_config_environment_variable_path(@app, @app_env, @env_config), class: "btn btn-primary" %>
+  </div>
 </div>
 
 <div class="list-group">
   <% @env_config.environment_variables.order(:key).each do |environment_variable| %>
     <%= link_to environment_variable.key, app_app_env_env_config_environment_variable_path(@app, @app_env, @env_config, environment_variable), class: "list-group-item list-group-item-action" %>
   <% end %>
+</div>
+
+<div class="mt-4">
+  <h2 class="h5">Change Sets</h2>
+  <div class="list-group mb-3">
+    <% @env_config.change_sets.order(created_at: :desc).limit(10).each do |change_set| %>
+      <div class="list-group-item">
+        <div><strong>Reason:</strong> <%= change_set.reason %></div>
+        <div><strong>Status:</strong> <%= change_set.status %></div>
+        <div><strong>At:</strong> <%= change_set.created_at %></div>
+      </div>
+    <% end %>
+  </div>
+
+  <h2 class="h5">Audit Events</h2>
+  <div class="list-group">
+    <% @env_config.audit_events.order(created_at: :desc).limit(20).each do |audit_event| %>
+      <div class="list-group-item">
+        <div><strong>Action:</strong> <%= audit_event.action %></div>
+        <div><%= audit_event.message %></div>
+        <div><strong>At:</strong> <%= audit_event.created_at %></div>
+      </div>
+    <% end %>
+  </div>
 </div>

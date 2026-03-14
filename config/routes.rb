@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :app_envs do
       resources :env_configs do
         resources :environment_variables
+        resource :batch_changes, only: [:new, :create], controller: "env_config_batch_changes"
       end
     end
   end

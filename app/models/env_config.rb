@@ -6,6 +6,8 @@ class EnvConfig < ApplicationRecord
 
   belongs_to :app_env
   has_many :environment_variables, dependent: :destroy
+  has_many :change_sets, dependent: :destroy
+  has_many :audit_events, dependent: :destroy
 
   validates :kind, presence: true, inclusion: { in: KINDS }, uniqueness: { scope: :app_env_id }
 end
