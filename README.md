@@ -20,8 +20,7 @@
 2. `DB_PORT` (default `5432`)
 3. `DB_USERNAME` (default current shell user)
 4. `DB_PASSWORD` (optional)
-5. `DB_NAME_DEVELOPMENT` (default `env_manager_development`)
-6. `DB_NAME_TEST` (default `env_manager_test`)
+5. `DB_NAME` (default `env_manager_development` in development, `env_manager_test` in test, `env_manager_production` in production)
 
 ## Testing
 
@@ -56,6 +55,6 @@
 3. `DB_PORT`
 4. `DB_USERNAME`
 5. `DB_PASSWORD`
-6. `DB_NAME_PRODUCTION`
+6. `DB_NAME`
 7. `RAILS_LOG_LEVEL`
 8. `FORCE_SSL`

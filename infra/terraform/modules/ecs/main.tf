@@ -99,7 +99,7 @@ locals {
       environment = [
         { name = "RAILS_ENV", value = "production" },
         { name = "DB_HOST", value = var.db_host },
-        { name = "DB_NAME_PRODUCTION", value = var.db_name },
+        { name = "DB_NAME", value = var.db_name },
         { name = "DB_USERNAME", value = var.db_username }
       ]
       secrets = [
