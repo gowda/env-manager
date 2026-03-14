@@ -57,7 +57,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Build application image
-        run: docker build --build-arg RUBY_VERSION=$(cat .ruby-version) -t env-manager:test .
+        run: |
+          RUBY_VERSION=$(cat .ruby-version)
+          docker build --build-arg RUBY_VERSION="${RUBY_VERSION#ruby-}" -t env-manager:test .
 
   scan_ruby:
     runs-on: ubuntu-latest
