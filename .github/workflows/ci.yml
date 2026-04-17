@@ -91,11 +91,108 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+      - name: Run Brakeman scan
+        id: brakeman
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          bin/brakeman --no-pager > brakeman.log 2>&1
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          {
+            echo "details<<EOF"
+            cat brakeman.log
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Scan for known security vulnerabilities in gems used
-        run: bin/bundler-audit
+      - name: Run bundler-audit scan
+        id: bundler_audit
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          bin/bundler-audit > bundler-audit.log 2>&1
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          {
+            echo "details<<EOF"
+            cat bundler-audit.log
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Publish security summary
+        if: always()
+        shell: bash
+        env:
+          BRAKEMAN_STATUS: ${{ steps.brakeman.outputs.status }}
+          BRAKEMAN_DETAILS: ${{ steps.brakeman.outputs.details }}
+          BUNDLER_AUDIT_STATUS: ${{ steps.bundler_audit.outputs.status }}
+          BUNDLER_AUDIT_DETAILS: ${{ steps.bundler_audit.outputs.details }}
+        run: |
+          render_section() {
+            local title="$1"
+            local status="$2"
+            local details="$3"
+
+            if [ "$status" = "0" ]; then
+              {
+                echo "<details open>"
+                echo "<summary><strong>🟢 $title</strong> - clean result</summary>"
+                echo
+                echo "<p><span style=\"color:#1a7f37;\"><strong>Success:</strong> No problems found. This check looks good.</span></p>"
+                echo
+                echo "</details>"
+                echo
+              } >> "$GITHUB_STEP_SUMMARY"
+            elif [ -n "$status" ]; then
+              {
+                echo "<details open>"
+                echo "<summary><strong>🔴 $title</strong> - action needed</summary>"
+                echo
+                echo "<p><span style=\"color:#cf222e;\"><strong>Error:</strong> This check found an issue. Please review the output below.</span></p>"
+                echo
+                echo '```text'
+                printf '%s\n' "$details"
+                echo '```'
+                echo "</details>"
+                echo
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              {
+                echo "<details open>"
+                echo "<summary><strong>🔵 $title</strong> - information</summary>"
+                echo
+                echo "<p><span style=\"color:#0969da;\"><strong>Info:</strong> This check did not return a clear result. Please review the workflow logs.</span></p>"
+                echo
+                echo "</details>"
+                echo
+              } >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+
+          {
+            echo "# Ruby security scan summary"
+            echo
+            echo "<p><span style=\"color:#0969da;\"><strong>Info:</strong> Here is the result of the security checks for this run.</span></p>"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          render_section "Brakeman" "$BRAKEMAN_STATUS" "$BRAKEMAN_DETAILS"
+          render_section "bundler-audit" "$BUNDLER_AUDIT_STATUS" "$BUNDLER_AUDIT_DETAILS"
+
+      - name: Fail job when security scans fail
+        if: always()
+        shell: bash
+        env:
+          BRAKEMAN_STATUS: ${{ steps.brakeman.outputs.status }}
+          BUNDLER_AUDIT_STATUS: ${{ steps.bundler_audit.outputs.status }}
+        run: |
+          if [ "$BRAKEMAN_STATUS" != "0" ] || [ "$BUNDLER_AUDIT_STATUS" != "0" ]; then
+            exit 1
+          fi
 
   lint:
     runs-on: ubuntu-latest
