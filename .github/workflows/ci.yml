@@ -15,8 +15,6 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     services:
       postgres:
         image: postgres:16
@@ -74,8 +72,6 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout code
@@ -88,8 +84,6 @@ jobs:
 
   scan_ruby:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout code
@@ -205,8 +199,6 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
     steps:
