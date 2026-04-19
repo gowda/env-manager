@@ -7,18 +7,44 @@ updates:
     open-pull-requests-limit: 10
     labels: ["dependencies", "bundler"]
     groups:
-      bundler-dependencies:
+      bundler-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      bundler-security:
+        applies-to: security-updates
+        patterns:
+          - "*"    
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "npm"]
+    groups:
+      npm-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      npm-security:
+        applies-to: security-updates
         patterns:
           - "*"
 
-  - package-ecosystem: "terraform"
+  - package-ecosystem: terraform
     directory: "/infra/terraform"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
     labels: ["dependencies", "terraform"]
     groups:
-      terraform-dependencies:
+      terraform-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      terraform-security:
+        applies-to: security-updates
         patterns:
           - "*"
 
@@ -29,6 +55,11 @@ updates:
     open-pull-requests-limit: 10
     labels: ["dependencies", "github-actions"]
     groups:
-      github-actions-dependencies:
+      github-actions-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      github-actions-security:
+        applies-to: security-updates
         patterns:
           - "*"
