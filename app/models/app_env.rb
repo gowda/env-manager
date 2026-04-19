@@ -1,5 +1,5 @@
 class AppEnv < ApplicationRecord
-  NAME_FORMAT = /\A(?=.{1,255}\z)[A-Za-z0-9](?:[A-Za-z0-9._ -]*[A-Za-z0-9])?\z/
+  NAME_FORMAT = /\A(?=.{1,255}\z)[a-z0-9]+(?:-[a-z0-9]+)*\z/
 
   belongs_to :app
   has_many :env_configs, dependent: :destroy

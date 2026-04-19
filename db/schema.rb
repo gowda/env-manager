@@ -128,6 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_161500) do
     t.boolean "sync_enabled", default: true, null: false
     t.datetime "updated_at", null: false
     t.index ["env_set_id"], name: "index_s3_set_mappings_on_env_set_id"
+    t.index ["key_pattern"], name: "index_s3_set_mappings_prefix_like", opclass: :text_pattern_ops, where: "((match_kind)::text = 'prefix'::text)"
     t.index ["match_kind", "key_pattern"], name: "index_s3_set_mappings_on_match_kind_and_key_pattern"
   end
 

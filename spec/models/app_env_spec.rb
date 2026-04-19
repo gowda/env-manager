@@ -11,9 +11,15 @@ RSpec.describe AppEnv, type: :model do
   end
 
   it "rejects invalid name format" do
-    app_env = app.app_envs.new(name: " invalid ")
+    app_env = app.app_envs.new(name: "invalid env")
 
     expect(app_env).not_to be_valid
     expect(app_env.errors[:name]).to be_present
+  end
+
+  it "accepts lowercase kebab-case names" do
+    app_env = app.app_envs.new(name: "staging-us")
+
+    expect(app_env).to be_valid
   end
 end
