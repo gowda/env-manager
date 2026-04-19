@@ -50,6 +50,21 @@
 
 Terraform no longer provisions or reads AWS Secrets Manager values for app runtime configuration. ECS task definitions consume S3 environment files from `environment_file_object_arns` in the exact order provided.
 
+## Deployment runbook: S3 env-file hardening
+
+When using S3 environment files for runtime secrets, treat the bucket as a secrets store and enforce all controls below before deployment.
+
+1. Encryption at rest: enable `SSE-KMS` with a customer-managed KMS key (CMK). Do not rely on SSE-S3 defaults.
+2. Key policy: allow decrypt only to the ECS task execution role and required admin/break-glass roles.
+3. Bucket public exposure: enable all four S3 Public Access Block settings at account and bucket levels.
+4. Bucket policy read scope: allow `s3:GetObject` only for the specific env-file object ARNs and only to the ECS task execution role.
+5. Bucket policy transport guard: enforce TLS (`aws:SecureTransport = true`) and deny non-TLS requests.
+6. Bucket policy write scope: restrict `s3:PutObject`/`s3:DeleteObject` to trusted automation roles (for example CI/deploy role), not broad principals.
+7. Object versioning: enable bucket versioning to support rollback and incident recovery.
+8. Access logging: enable server access logging or CloudTrail data events for object-level read/write audit trails.
+9. Rotation runbook: define and rehearse secret rotation by writing new env-file object versions and forcing ECS deployment.
+10. Least-privilege review: regularly validate IAM and bucket policies to ensure no wildcard principals or broad object access.
+
 ## Production environment variables
 
 1. `SECRET_KEY_BASE`
