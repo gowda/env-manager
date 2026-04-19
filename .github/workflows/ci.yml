@@ -9,9 +9,16 @@ concurrency:
   group: ${{ github.repository }}-ci-${{ github.ref_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required so setup-node/ruby/setup-ruby can save caches.
+      actions: write
     services:
       postgres:
         image: postgres:16
@@ -69,6 +76,8 @@ jobs:
 
   build_image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -81,6 +90,10 @@ jobs:
 
   scan_ruby:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required so ruby/setup-ruby can save the bundler cache.
+      actions: write
 
     steps:
       - name: Checkout code
@@ -196,6 +209,10 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required so actions/cache and ruby/setup-ruby can save caches.
+      actions: write
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
     steps:
