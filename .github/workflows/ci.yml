@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required so setup-node/ruby/setup-ruby can save caches.
-      actions: write
     services:
       postgres:
         image: postgres:16
@@ -92,8 +90,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required so ruby/setup-ruby can save the bundler cache.
-      actions: write
 
     steps:
       - name: Checkout code
@@ -211,8 +207,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # Required so actions/cache and ruby/setup-ruby can save caches.
-      actions: write
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
     steps:
