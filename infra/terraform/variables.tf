@@ -78,34 +78,24 @@ variable "db_username" {
   default = "envmanager"
 }
 
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
 variable "certificate_arn" {
   type    = string
   default = null
 }
 
-variable "github_token_secret_name" {
-  type    = string
-  default = "env-manager/github-token"
-}
+variable "environment_file_object_arns" {
+  type        = list(string)
+  description = "Ordered list of S3 object ARNs used as ECS environment files."
 
-variable "secret_key_base_secret_name" {
-  type    = string
-  default = "env-manager/secret-key-base"
-}
-
-variable "active_record_encryption_primary_key_secret_name" {
-  type    = string
-  default = "env-manager/active-record-encryption-primary-key"
-}
-
-variable "active_record_encryption_deterministic_key_secret_name" {
-  type    = string
-  default = "env-manager/active-record-encryption-deterministic-key"
-}
-
-variable "active_record_encryption_key_derivation_salt_secret_name" {
-  type    = string
-  default = "env-manager/active-record-encryption-key-derivation-salt"
+  validation {
+    condition     = length(var.environment_file_object_arns) > 0
+    error_message = "Provide at least one S3 environment file object ARN."
+  }
 }
 
 variable "s3_bucket_name" {

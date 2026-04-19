@@ -48,6 +48,8 @@
 3. Set GitHub environment secret: `AWS_DEPLOY_ROLE_ARN`
 4. Run the GitHub Actions `Deploy` workflow to build, push, and roll out a new ECS task definition.
 
+Terraform no longer provisions or reads AWS Secrets Manager values for app runtime configuration. ECS task definitions consume S3 environment files from `environment_file_object_arns` in the exact order provided.
+
 ## Production environment variables
 
 1. `SECRET_KEY_BASE`

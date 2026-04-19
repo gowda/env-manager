@@ -26,22 +26,13 @@ variable "db_username" {
   type = string
 }
 
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
 variable "allowed_security_group_ids" {
   type = list(string)
-}
-
-resource "random_password" "db_password" {
-  length  = 32
-  special = false
-}
-
-resource "aws_secretsmanager_secret" "db_password" {
-  name = "${var.name_prefix}/db-password"
-}
-
-resource "aws_secretsmanager_secret_version" "db_password" {
-  secret_id     = aws_secretsmanager_secret.db_password.id
-  secret_string = random_password.db_password.result
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -81,7 +72,7 @@ resource "aws_db_instance" "this" {
   allocated_storage       = var.db_allocated_storage
   db_name                 = var.db_name
   username                = var.db_username
-  password                = random_password.db_password.result
+  password                = var.db_password
   db_subnet_group_name    = aws_db_subnet_group.this.name
   vpc_security_group_ids  = [aws_security_group.db.id]
   backup_retention_period = 7
@@ -94,8 +85,4 @@ resource "aws_db_instance" "this" {
 
 output "db_address" {
   value = aws_db_instance.this.address
-}
-
-output "db_password_secret_arn" {
-  value = aws_secretsmanager_secret.db_password.arn
 }

@@ -50,40 +50,13 @@ variable "task_role_arn" {
   type = string
 }
 
-variable "db_host" {
-  type = string
-}
+variable "environment_file_object_arns" {
+  type = list(string)
 
-variable "db_name" {
-  type = string
-}
-
-variable "db_username" {
-  type = string
-}
-
-variable "db_password_secret_arn" {
-  type = string
-}
-
-variable "secret_key_base_secret_arn" {
-  type = string
-}
-
-variable "active_record_encryption_primary_key_secret_arn" {
-  type = string
-}
-
-variable "active_record_encryption_deterministic_key_secret_arn" {
-  type = string
-}
-
-variable "active_record_encryption_key_derivation_salt_secret_arn" {
-  type = string
-}
-
-variable "github_token_secret_arn" {
-  type = string
+  validation {
+    condition     = length(var.environment_file_object_arns) > 0
+    error_message = "Provide at least one S3 environment file object ARN for ECS environmentFiles."
+  }
 }
 
 resource "aws_ecs_cluster" "this" {
@@ -109,18 +82,13 @@ locals {
         }
       ]
       environment = [
-        { name = "RAILS_ENV", value = "production" },
-        { name = "DB_HOST", value = var.db_host },
-        { name = "DB_NAME", value = var.db_name },
-        { name = "DB_USERNAME", value = var.db_username }
+        { name = "RAILS_ENV", value = "production" }
       ]
-      secrets = [
-        { name = "DB_PASSWORD", valueFrom = var.db_password_secret_arn },
-        { name = "SECRET_KEY_BASE", valueFrom = var.secret_key_base_secret_arn },
-        { name = "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY", valueFrom = var.active_record_encryption_primary_key_secret_arn },
-        { name = "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY", valueFrom = var.active_record_encryption_deterministic_key_secret_arn },
-        { name = "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT", valueFrom = var.active_record_encryption_key_derivation_salt_secret_arn },
-        { name = "GITHUB_TOKEN", valueFrom = var.github_token_secret_arn }
+      environmentFiles = [
+        for object_arn in var.environment_file_object_arns : {
+          type  = "s3"
+          value = object_arn
+        }
       ]
       logConfiguration = {
         logDriver = "awslogs"
