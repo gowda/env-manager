@@ -21,12 +21,12 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [:id]
 
-  # Rake tasks such as assets:precompile do not eager load. Allow
-  # SECRET_KEY_BASE_DUMMY there, but require real secrets for runtime boot.
-  config.secret_key_base = ENV["SECRET_KEY_BASE"] if ENV["SECRET_KEY_BASE"].present?
+  # assets:precompile uses SECRET_KEY_BASE_DUMMY=1. Runtime must always provide
+  # real secret values through environment variables.
+  precompile_mode = ENV["SECRET_KEY_BASE_DUMMY"] == "1"
 
-  if config.eager_load
-    ENV.fetch("SECRET_KEY_BASE")
+  unless precompile_mode
+    config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
     config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY")
     config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY")
     config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT")
