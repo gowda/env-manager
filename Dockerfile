@@ -45,10 +45,7 @@ COPY . .
 
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
-RUN SECRET_KEY_BASE=dummy_secret_key_base \
-    ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=dummy_primary_key_32_chars_minimum \
-    ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=dummy_deterministic_key_32_chars \
-    ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=dummy_key_derivation_salt_32_chars \
+RUN SECRET_KEY_BASE_DUMMY=1 \
     SKIP_YARN_INSTALL=1 DB_NAME=dummy ./bin/rails assets:precompile
 
 RUN rm -rf node_modules
