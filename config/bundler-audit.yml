@@ -1,9 +1,1 @@
-ignore:
-  - CVE-THAT-DOES-NOT-APPLY
-  - GHSA-53p3-c7vp-4mcc
-  - GHSA-qmpg-8xg6-ph5q
-  - CVE-2026-33658
-  - GHSA-p9fm-f462-ggrg
-  - CVE-2026-33210
-  - GHSA-3m6g-2423-7cp3
-  - GHSA-46fp-8f5p-pf2m
+ignore: []
