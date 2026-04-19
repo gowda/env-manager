@@ -16,3 +16,14 @@
     <%= link_to env_config.kind, app_app_env_env_config_path(@app, @app_env, env_config), class: "list-group-item list-group-item-action" %>
   <% end %>
 </div>
+
+<div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+  <h2 class="h5 mb-0">Sets</h2>
+  <%= link_to "Manage Sets", app_app_env_env_sets_path(@app, @app_env), class: "btn btn-outline-primary" %>
+</div>
+
+<div class="list-group">
+  <% @app_env.env_sets.order(:name).each do |env_set| %>
+    <%= link_to env_set.name, app_app_env_env_set_path(@app, @app_env, env_set), class: "list-group-item list-group-item-action d-flex justify-content-between" %>
+  <% end %>
+</div>

@@ -58,3 +58,10 @@
 6. `DB_NAME`
 7. `RAILS_LOG_LEVEL`
 8. `FORCE_SSL`
+
+## S3 mapping cleanup contract
+
+1. Deleting an `EnvSet` triggers best-effort S3 cleanup per configured mapping.
+2. Cleanup deletes exactly one outbound key per mapping (`mapping.outbound_key`).
+3. For prefix mappings, that means only the canonical file (`<prefix>/<outbound_identifier>.env`) is removed.
+4. Historical or ad-hoc objects under the same prefix are not recursively deleted.

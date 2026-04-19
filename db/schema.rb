@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_14_160200) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_161500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -79,6 +79,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_160200) do
     t.index ["app_env_id"], name: "index_env_configs_on_app_env_id"
   end
 
+  create_table "env_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "env_set_id", null: false
+    t.string "key", null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
+    t.boolean "value_present", default: true, null: false
+    t.string "value_type", default: "string", null: false
+    t.index ["env_set_id", "key"], name: "index_env_items_on_env_set_id_and_key", unique: true
+    t.index ["env_set_id"], name: "index_env_items_on_env_set_id"
+  end
+
+  create_table "env_sets", force: :cascade do |t|
+    t.bigint "app_env_id", null: false
+    t.string "category", null: false
+    t.bigint "cloned_from_version_id"
+    t.datetime "created_at", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.string "name", null: false
+    t.boolean "ui_editable", default: true, null: false
+    t.datetime "updated_at", null: false
+    t.index ["app_env_id", "name"], name: "index_env_sets_on_app_env_id_and_name", unique: true
+    t.index ["app_env_id"], name: "index_env_sets_on_app_env_id"
+    t.index ["cloned_from_version_id"], name: "index_env_sets_on_cloned_from_version_id"
+  end
+
   create_table "environment_variables", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "env_config_id", null: false
@@ -88,6 +114,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_160200) do
     t.string "value_type", default: "single_line", null: false
     t.index ["env_config_id", "key"], name: "index_environment_variables_on_env_config_id_and_key", unique: true
     t.index ["env_config_id"], name: "index_environment_variables_on_env_config_id"
+  end
+
+  create_table "s3_set_mappings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "env_set_id", null: false
+    t.string "key_pattern", null: false
+    t.string "last_sync_origin"
+    t.datetime "last_synced_at"
+    t.string "last_synced_checksum"
+    t.string "match_kind", default: "exact", null: false
+    t.string "outbound_identifier"
+    t.boolean "sync_enabled", default: true, null: false
+    t.datetime "updated_at", null: false
+    t.index ["env_set_id"], name: "index_s3_set_mappings_on_env_set_id"
+    t.index ["key_pattern"], name: "index_s3_set_mappings_prefix_like", opclass: :text_pattern_ops, where: "((match_kind)::text = 'prefix'::text)"
+    t.index ["match_kind", "key_pattern"], name: "index_s3_set_mappings_on_match_kind_and_key_pattern"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -229,6 +271,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_160200) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.datetime "created_at"
+    t.string "event", null: false
+    t.bigint "item_id", null: false
+    t.string "item_type", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.text "object"
+    t.text "object_changes"
+    t.string "whodunnit"
+    t.index ["created_at"], name: "index_versions_on_created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   create_table "workflow_definitions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.boolean "enabled", default: true, null: false
@@ -274,7 +329,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_14_160200) do
   add_foreign_key "change_entries", "change_sets"
   add_foreign_key "change_sets", "env_configs"
   add_foreign_key "env_configs", "app_envs"
+  add_foreign_key "env_items", "env_sets"
+  add_foreign_key "env_sets", "app_envs"
   add_foreign_key "environment_variables", "env_configs"
+  add_foreign_key "s3_set_mappings", "env_sets"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

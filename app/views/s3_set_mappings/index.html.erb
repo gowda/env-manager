@@ -1,0 +1,7 @@
+<h1 class="h3 mb-3">S3 Mappings</h1>
+
+<div class="list-group">
+  <% @mappings.each do |mapping| %>
+    <div class="list-group-item"><%= mapping.match_kind %>: <%= mapping.key_pattern %></div>
+  <% end %>
+</div>

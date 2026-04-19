@@ -47,6 +47,8 @@ gem "rbnacl"
 gem "aws-sdk-s3"
 gem "aws-sdk-ecs"
 gem "faraday-retry"
+gem "paper_trail"
+gem "aws-sdk-sqs"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -62,6 +64,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "rspec-rails", "~> 8.0.4"
+  gem "factory_bot_rails"
 end
 
 group :development do

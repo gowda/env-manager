@@ -1,0 +1,18 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><%= @app.name %> / <%= @app_env.name %> Sets</h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Import from S3", new_app_app_env_s3_set_import_path(@app, @app_env), class: "btn btn-outline-primary" %>
+    <%= link_to "New Set", new_app_app_env_env_set_path(@app, @app_env), class: "btn btn-primary" %>
+  </div>
+</div>
+
+<div class="list-group">
+  <% @env_sets.each do |env_set| %>
+    <%= link_to app_app_env_env_set_path(@app, @app_env, env_set), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
+      <span><%= env_set.name %> <small class="text-body-secondary">(<%= env_set.category %>)</small></span>
+      <% unless env_set.ui_editable? %>
+        <span class="badge text-bg-warning">Terraform Managed</span>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

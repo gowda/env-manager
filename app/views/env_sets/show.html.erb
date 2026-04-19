@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><%= @env_set.name %></h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Clone", clone_app_app_env_env_set_path(@app, @app_env, @env_set), class: "btn btn-outline-secondary" %>
+    <% if @env_set.ui_editable? %>
+      <%= link_to "Edit", edit_app_app_env_env_set_path(@app, @app_env, @env_set), class: "btn btn-outline-primary" %>
+      <%= link_to "Delete", app_app_env_env_set_path(@app, @app_env, @env_set), data: { turbo_method: :delete, turbo_confirm: "Delete this set?" }, class: "btn btn-outline-danger" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p class="mb-1"><strong>Category:</strong> <%= @env_set.category %></p>
+    <p class="mb-1"><strong>UI Editable:</strong> <%= @env_set.ui_editable? ? "Yes" : "No (Terraform managed)" %></p>
+    <p class="mb-0"><strong>Cloned From Version:</strong> <%= @env_set.cloned_from_version_id || "-" %></p>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Items</h2>
+  <% if @env_set.ui_editable? %>
+    <%= link_to "Add Item", new_app_app_env_env_set_env_item_path(@app, @app_env, @env_set), class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<div class="list-group mb-4">
+  <% @env_set.env_items.order(:key).each do |item| %>
+    <%= link_to app_app_env_env_set_env_item_path(@app, @app_env, @env_set, item), class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
+      <span><%= item.key %></span>
+      <span class="text-body-secondary"><%= item.secret? ? (item.value_present? ? "Secret configured" : "Secret not set") : item.value_type %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h2 class="h5 mb-0">S3 Mappings</h2>
+  <%= link_to "Add Mapping", new_app_app_env_env_set_s3_set_mapping_path(@app, @app_env, @env_set), class: "btn btn-outline-primary" %>
+</div>
+
+<div class="list-group mb-4">
+  <% @env_set.s3_set_mappings.order(:created_at).each do |mapping| %>
+    <div class="list-group-item d-flex justify-content-between align-items-center">
+      <span><%= mapping.match_kind %>: <code><%= mapping.key_pattern %></code></span>
+      <%= link_to "Delete", app_app_env_env_set_s3_set_mapping_path(@app, @app_env, @env_set, mapping), data: { turbo_method: :delete, turbo_confirm: "Delete this mapping?" }, class: "btn btn-sm btn-outline-danger" %>
+    </div>
+  <% end %>
+</div>
+
+<h2 class="h5">Version History</h2>
+<div class="list-group">
+  <% @env_set.versions.order(created_at: :desc).limit(20).each do |version| %>
+    <div class="list-group-item d-flex justify-content-between">
+      <span><strong><%= version.event %></strong></span>
+      <span class="text-body-secondary">v#<%= version.id %> at <%= version.created_at %></span>
+    </div>
+  <% end %>
+</div>

@@ -26,6 +26,7 @@
 /.DS_Store
 *.swp
 *.swo
+TODO.md
 
 /infra/terraform/.terraform/
 /infra/terraform/*.tfstate

@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe WorkflowRunJob, type: :job do
   def setup_records(kind:, metadata:)
-    app = App.create!(name: "Job-#{SecureRandom.hex(4)}", github_repository: "org/job")
-    app_env = app.app_envs.create!(name: "develop")
+    app = create(:app, name: "Job-#{SecureRandom.hex(4)}", github_repository: "org/job")
+    app_env = create(:app_env, app: app, name: "develop")
     env_config = app_env.env_configs.create!(kind: "runtime_environment")
     workflow_definition = env_config.workflow_definitions.create!(kind: kind, enabled: true, metadata: metadata)
     workflow_run = env_config.workflow_runs.create!(workflow_definition: workflow_definition, status: "queued", trigger_source: "spec")

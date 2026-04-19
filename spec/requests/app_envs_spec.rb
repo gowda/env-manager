@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "AppEnvs", type: :request do
   describe "POST /apps/:app_id/app_envs" do
     it "creates an app environment" do
-      app = App.create!(name: "Catalog", github_repository: "org/catalog")
+      app = create(:app, name: "Catalog", github_repository: "org/catalog")
 
       expect do
         post app_app_envs_path(app), params: {
