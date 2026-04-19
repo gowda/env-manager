@@ -1,0 +1,39 @@
+<h1 class="h3 mb-3">Import Set From S3</h1>
+
+<% if @import_error.present? %>
+  <div class="alert alert-danger"><%= @import_error %></div>
+<% end %>
+
+<%= form_with url: app_app_env_s3_set_import_path(@app, @app_env), scope: :s3_import do |f| %>
+  <div class="mb-3">
+    <%= f.label :object_key, "S3 object key", class: "form-label" %>
+    <%= f.text_field :object_key, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination_app_id, "Destination app", class: "form-label" %>
+    <%= f.collection_select :destination_app_id, @apps, :id, :name, { selected: @app.id }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination_app_env_id, "Destination environment (optional)", class: "form-label" %>
+    <%= f.collection_select :destination_app_env_id, @app.app_envs.order(:name), :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination_new_environment_name, "Or create new destination environment", class: "form-label" %>
+    <%= f.text_field :destination_new_environment_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination_env_set_id, "Destination set (optional)", class: "form-label" %>
+    <%= f.collection_select :destination_env_set_id, @env_sets, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination_new_set_name, "Or create new destination set", class: "form-label" %>
+    <%= f.text_field :destination_new_set_name, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Import", class: "btn btn-primary" %>
+<% end %>

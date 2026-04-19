@@ -1,0 +1,19 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0"><%= @env_item.key %></h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Edit", edit_app_app_env_env_set_env_item_path(@app, @app_env, @env_set, @env_item), class: "btn btn-outline-primary" %>
+    <%= link_to "Delete", app_app_env_env_set_env_item_path(@app, @app_env, @env_set, @env_item), data: { turbo_method: :delete, turbo_confirm: "Delete this item?" }, class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <p class="mb-2"><strong>Value type:</strong> <%= @env_item.value_type %></p>
+    <% if @env_item.secret? %>
+      <p class="mb-0"><strong>Value:</strong> <%= @env_item.has_value? ? "Secret configured" : "Secret not set" %></p>
+    <% else %>
+      <h2 class="h6">Value</h2>
+      <pre class="mb-0"><%= @env_item.value %></pre>
+    <% end %>
+  </div>
+</div>
