@@ -5,7 +5,7 @@ class CreateEnvItems < ActiveRecord::Migration[8.1]
       t.string :key, null: false
       t.text :value
       t.string :value_type, null: false, default: "string"
-      t.boolean :has_value, null: false, default: true
+      t.boolean :value_present, null: false, default: true
 
       t.timestamps
     end

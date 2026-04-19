@@ -9,6 +9,13 @@
   <div class="mb-3">
     <%= f.label :key_pattern, class: "form-label" %>
     <%= f.text_field :key_pattern, class: "form-control" %>
+    <small class="text-body-secondary">Use full object key for exact match, or prefix path ending with <code>/</code> for prefix match.</small>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :outbound_identifier, class: "form-label" %>
+    <%= f.text_field :outbound_identifier, class: "form-control" %>
+    <small class="text-body-secondary">Required for prefix mappings. Outbound key becomes <code>&lt;prefix&gt;/&lt;identifier&gt;.env</code>.</small>
   </div>
 
   <div class="form-check mb-3">

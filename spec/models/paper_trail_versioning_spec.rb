@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe "PaperTrail versioning", type: :model do
   it "tracks app, app_env, env_set and env_item changes" do
-    app = App.create!(name: "Versioned-#{SecureRandom.hex(4)}", github_repository: "org/versioned")
-    app_env = app.app_envs.create!(name: "develop")
-    env_set = app_env.env_sets.create!(name: "Versioned Set", category: "custom")
-    env_item = env_set.env_items.create!(key: "API_URL", value_type: "string", value: "https://example.com")
+    app = create(:app)
+    app_env = create(:app_env, app: app, name: "develop")
+    env_set = create(:env_set, app_env: app_env, name: "Versioned Set")
+    env_item = create(:env_item, env_set: env_set, key: "API_URL", value_type: "string", value: "https://example.com")
 
     expect(app.versions).not_to be_empty
     expect(app_env.versions).not_to be_empty

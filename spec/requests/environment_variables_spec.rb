@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "EnvironmentVariables", type: :request do
   def create_base(kind: "runtime_environment")
-    app = App.create!(name: "Orders-#{SecureRandom.hex(4)}", github_repository: "org/orders")
-    app_env = app.app_envs.create!(name: "develop")
+    app = create(:app, name: "Orders-#{SecureRandom.hex(4)}", github_repository: "org/orders")
+    app_env = create(:app_env, app: app, name: "develop")
     env_config = app_env.env_configs.create!(kind: kind)
 
     [app, app_env, env_config]

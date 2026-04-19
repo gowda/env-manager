@@ -2,15 +2,15 @@ require "rails_helper"
 
 RSpec.describe "EnvItems", type: :request do
   def setup_data(ui_editable: true)
-    app = App.create!(name: "EnvItems-#{SecureRandom.hex(4)}", github_repository: "org/env-items")
-    app_env = app.app_envs.create!(name: "develop")
-    env_set = app_env.env_sets.create!(name: "SetA", category: "custom", ui_editable: ui_editable)
+    app = create(:app, name: "EnvItems-#{SecureRandom.hex(4)}")
+    app_env = create(:app_env, app: app, name: "develop")
+    env_set = create(:env_set, app_env: app_env, name: "SetA", ui_editable: ui_editable)
     [app, app_env, env_set]
   end
 
   it "does not expose secret values in show page" do
     app, app_env, env_set = setup_data
-    item = env_set.env_items.create!(key: "TOKEN", value_type: "secret", value: "abcd", has_value: true)
+    item = create(:env_item, :secret, env_set: env_set, key: "TOKEN", value: "abcd", value_present: true)
 
     get app_app_env_env_set_env_item_path(app, app_env, env_set, item)
 

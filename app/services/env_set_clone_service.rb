@@ -61,7 +61,7 @@ class EnvSetCloneService
         key: source_item.key,
         value_type: source_item.value_type,
         value: nil,
-        has_value: false
+        value_present: false
       )
       return
     end
@@ -70,7 +70,7 @@ class EnvSetCloneService
       key: source_item.key,
       value_type: source_item.value_type,
       value: source_item.value,
-      has_value: source_item.secret? ? source_item.has_value : true
+      value_present: source_item.secret? ? source_item.value_present : true
     )
   end
 end

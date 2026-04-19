@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "EnvConfigs", type: :request do
   describe "POST /apps/:app_id/app_envs/:app_env_id/env_configs" do
     it "creates an environment config" do
-      app = App.create!(name: "Accounts", github_repository: "org/accounts")
-      app_env = app.app_envs.create!(name: "uat")
+      app = create(:app, name: "Accounts", github_repository: "org/accounts")
+      app_env = create(:app_env, app: app, name: "uat")
 
       expect do
         post app_app_env_env_configs_path(app, app_env), params: {

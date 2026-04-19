@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AppEnv, type: :model do
-  let(:app) { App.create!(name: "AppEnvSpec-#{SecureRandom.hex(4)}", github_repository: "org/app-env-spec") }
+  let(:app) { create(:app) }
 
   it "creates default env sets after creation" do
-    app_env = app.app_envs.create!(name: "develop")
+    app_env = create(:app_env, app: app, name: "develop")
 
     categories = app_env.env_sets.pluck(:category)
     expect(categories).to include(*EnvSet::PREDEFINED_CATEGORIES)

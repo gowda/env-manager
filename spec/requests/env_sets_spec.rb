@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "EnvSets", type: :request do
   def base_entities
-    app = App.create!(name: "EnvSets-#{SecureRandom.hex(4)}", github_repository: "org/env-sets")
-    app_env = app.app_envs.create!(name: "develop")
+    app = create(:app, name: "EnvSets-#{SecureRandom.hex(4)}")
+    app_env = create(:app_env, app: app, name: "develop")
     [app, app_env]
   end
 
@@ -25,12 +25,12 @@ RSpec.describe "EnvSets", type: :request do
 
   it "clones set and keeps source version mapping" do
     app, app_env = base_entities
-    source_set = app_env.env_sets.create!(name: "Source Set", category: "custom")
-    source_set.env_items.create!(key: "API_URL", value_type: "string", value: "https://example.com")
-    source_set.env_items.create!(key: "TOKEN", value_type: "secret", value: "abc", has_value: true)
+    source_set = create(:env_set, app_env: app_env, name: "Source Set")
+    create(:env_item, env_set: source_set, key: "API_URL", value_type: "string", value: "https://example.com")
+    create(:env_item, :secret, env_set: source_set, key: "TOKEN", value: "abc", value_present: true)
 
-    destination_app = App.create!(name: "Destination-#{SecureRandom.hex(4)}", github_repository: "org/destination")
-    destination_env = destination_app.app_envs.create!(name: "main")
+    destination_app = create(:app, name: "Destination-#{SecureRandom.hex(4)}", github_repository: "org/destination")
+    destination_env = create(:app_env, app: destination_app, name: "main")
 
     expect do
       post clone_app_app_env_env_set_path(app, app_env, source_set), params: {
@@ -45,6 +45,6 @@ RSpec.describe "EnvSets", type: :request do
 
     cloned = EnvSet.last
     expect(cloned.cloned_from_version_id).to eq(source_set.versions.last.id)
-    expect(cloned.env_items.find_by(key: "TOKEN").has_value).to eq(false)
+    expect(cloned.env_items.find_by(key: "TOKEN").value_present).to eq(false)
   end
 end

@@ -28,7 +28,7 @@
   <% @env_set.env_items.order(:key).each do |item| %>
     <%= link_to app_app_env_env_set_env_item_path(@app, @app_env, @env_set, item), class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
       <span><%= item.key %></span>
-      <span class="text-body-secondary"><%= item.secret? ? (item.has_value? ? "Secret configured" : "Secret not set") : item.value_type %></span>
+      <span class="text-body-secondary"><%= item.secret? ? (item.value_present? ? "Secret configured" : "Secret not set") : item.value_type %></span>
     <% end %>
   <% end %>
 </div>

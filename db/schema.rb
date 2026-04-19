@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_19_120300) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_19_161500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,10 +82,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_120300) do
   create_table "env_items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "env_set_id", null: false
-    t.boolean "has_value", default: true, null: false
     t.string "key", null: false
     t.datetime "updated_at", null: false
     t.text "value"
+    t.boolean "value_present", default: true, null: false
     t.string "value_type", default: "string", null: false
     t.index ["env_set_id", "key"], name: "index_env_items_on_env_set_id_and_key", unique: true
     t.index ["env_set_id"], name: "index_env_items_on_env_set_id"
@@ -124,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_120300) do
     t.datetime "last_synced_at"
     t.string "last_synced_checksum"
     t.string "match_kind", default: "exact", null: false
+    t.string "outbound_identifier"
     t.boolean "sync_enabled", default: true, null: false
     t.datetime "updated_at", null: false
     t.index ["env_set_id"], name: "index_s3_set_mappings_on_env_set_id"

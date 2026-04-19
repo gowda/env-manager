@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "WorkflowTriggers", type: :request do
   def setup_env
-    app = App.create!(name: "Workflow-#{SecureRandom.hex(4)}", github_repository: "org/workflow")
-    app_env = app.app_envs.create!(name: "develop")
+    app = create(:app, name: "Workflow-#{SecureRandom.hex(4)}", github_repository: "org/workflow")
+    app_env = create(:app_env, app: app, name: "develop")
     env_config = app_env.env_configs.create!(kind: "runtime_environment")
     env_config.workflow_definitions.create!(kind: "s3_then_ecs_force_deploy", enabled: true)
     [app, app_env, env_config]

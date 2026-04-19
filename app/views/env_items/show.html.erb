@@ -10,7 +10,7 @@
   <div class="card-body">
     <p class="mb-2"><strong>Value type:</strong> <%= @env_item.value_type %></p>
     <% if @env_item.secret? %>
-      <p class="mb-0"><strong>Value:</strong> <%= @env_item.has_value? ? "Secret configured" : "Secret not set" %></p>
+      <p class="mb-0"><strong>Value:</strong> <%= @env_item.value_present? ? "Secret configured" : "Secret not set" %></p>
     <% else %>
       <h2 class="h6">Value</h2>
       <pre class="mb-0"><%= @env_item.value %></pre>

@@ -64,7 +64,7 @@ class EnvItemsController < ApplicationController
   end
 
   def env_item_params
-    params.expect(env_item: [:key, :value_type, :value, :has_value])
+    params.expect(env_item: [:key, :value_type, :value, :value_present])
   end
 
   def ensure_ui_editable!

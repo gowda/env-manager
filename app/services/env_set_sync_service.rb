@@ -12,7 +12,7 @@ class EnvSetSyncService
 
   def call
     apply_payload! if @payload.present?
-    S3SetSyncService.sync_set_to_s3(@env_set, source: @source) if @sync_to_s3
+    S3SetSyncService.call(action: :sync_outbound, env_set: @env_set, source: @source) if @sync_to_s3
     @env_set
   end
 
@@ -30,9 +30,9 @@ class EnvSetSyncService
         if item
           next if item.value == value
 
-          item.update!(value: value, has_value: item.secret? ? value.present? : true)
+          item.update!(value: value)
         else
-          @env_set.env_items.create!(key: key, value: value, value_type: "string", has_value: value.present?)
+          @env_set.env_items.create!(key: key, value: value, value_type: "string")
         end
       end
 

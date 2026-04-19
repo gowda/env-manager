@@ -8,8 +8,16 @@ class S3SetImportsController < ApplicationController
   end
 
   def create
-    target_set = resolve_target_set
-    S3SetSyncService.import_object_to_set!(env_set: target_set, object_key: import_params[:object_key], source: "manual_import")
+    target_set = nil
+    ActiveRecord::Base.transaction do
+      target_set = resolve_target_set
+      S3SetSyncService.call(
+        action: :import_object,
+        env_set: target_set,
+        object_key: import_params[:object_key],
+        source: "manual_import"
+      )
+    end
 
     redirect_to [target_set.app_env.app, target_set.app_env, target_set], notice: "S3 object imported successfully."
   rescue ActiveRecord::RecordInvalid, ArgumentError => e

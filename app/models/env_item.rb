@@ -12,14 +12,14 @@ class EnvItem < ApplicationRecord
   validates :value_type, presence: true, inclusion: { in: VALUE_TYPES }
   validate :validate_value_for_type
 
-  before_validation :normalize_value_flags
+  before_validation :normalize_value_presence
 
   def secret?
     value_type == "secret"
   end
 
   def safe_display_value
-    return "Secret not set" if secret? && !has_value?
+    return "Secret not set" if secret? && !value_present?
     return "Secret configured" if secret?
 
     value
@@ -27,15 +27,21 @@ class EnvItem < ApplicationRecord
 
   private
 
-  def normalize_value_flags
+  def normalize_value_presence
     self.value_type = "string" if value_type.blank?
-    self.has_value = false if secret? && value.blank?
-    self.has_value = true if !secret? && has_value.nil?
+
+    if secret?
+      self.value_present = false if value_present.nil?
+      self.value = nil unless value_present?
+      return
+    end
+
+    self.value_present = true
   end
 
   def validate_value_for_type
     if secret?
-      return if !has_value? || value.present?
+      return if !value_present? || value.present?
 
       errors.add(:value, "must be present when secret is marked as set")
       return
@@ -49,7 +55,5 @@ class EnvItem < ApplicationRecord
     if value_type == "string" && value.match?(/[\r\n]/)
       errors.add(:value, "must be single line for string type")
     end
-
-    self.has_value = true
   end
 end

@@ -13,7 +13,7 @@ class S3EventProcessorService
       etag = record.dig("s3", "object", "eTag")
       next if object_key.blank?
 
-      S3SetSyncService.process_s3_event!(object_key: object_key, checksum: etag)
+      S3SetSyncService.call(action: :process_inbound_event, object_key: object_key, checksum: etag)
     end
   end
 end

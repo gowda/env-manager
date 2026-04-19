@@ -46,6 +46,6 @@ class S3SetMappingsController < ApplicationController
   end
 
   def mapping_params
-    params.expect(s3_set_mapping: [:key_pattern, :match_kind, :sync_enabled])
+    params.expect(s3_set_mapping: [:key_pattern, :match_kind, :outbound_identifier, :sync_enabled])
   end
 end

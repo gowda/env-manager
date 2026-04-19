@@ -8,6 +8,10 @@ module Integrations
       client.get_object(bucket: bucket, key: key).body.read
     end
 
+    def delete_object(bucket:, key:)
+      client.delete_object(bucket: bucket, key: key)
+    end
+
     private
 
     def client
