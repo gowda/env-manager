@@ -88,9 +88,24 @@ variable "github_token_secret_name" {
   default = "env-manager/github-token"
 }
 
-variable "rails_master_key_secret_name" {
+variable "secret_key_base_secret_name" {
   type    = string
-  default = "env-manager/rails-master-key"
+  default = "env-manager/secret-key-base"
+}
+
+variable "active_record_encryption_primary_key_secret_name" {
+  type    = string
+  default = "env-manager/active-record-encryption-primary-key"
+}
+
+variable "active_record_encryption_deterministic_key_secret_name" {
+  type    = string
+  default = "env-manager/active-record-encryption-deterministic-key"
+}
+
+variable "active_record_encryption_key_derivation_salt_secret_name" {
+  type    = string
+  default = "env-manager/active-record-encryption-key-derivation-salt"
 }
 
 variable "s3_bucket_name" {

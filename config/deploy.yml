@@ -8,8 +8,6 @@ registry:
   server: localhost:5555
 
 env:
-  secret:
-    - RAILS_MASTER_KEY
   clear:
     SOLID_QUEUE_IN_PUMA: true
 aliases:

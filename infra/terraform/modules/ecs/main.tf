@@ -66,7 +66,19 @@ variable "db_password_secret_arn" {
   type = string
 }
 
-variable "rails_master_key_secret_arn" {
+variable "secret_key_base_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_primary_key_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_deterministic_key_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_key_derivation_salt_secret_arn" {
   type = string
 }
 
@@ -104,7 +116,10 @@ locals {
       ]
       secrets = [
         { name = "DB_PASSWORD", valueFrom = var.db_password_secret_arn },
-        { name = "RAILS_MASTER_KEY", valueFrom = var.rails_master_key_secret_arn },
+        { name = "SECRET_KEY_BASE", valueFrom = var.secret_key_base_secret_arn },
+        { name = "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY", valueFrom = var.active_record_encryption_primary_key_secret_arn },
+        { name = "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY", valueFrom = var.active_record_encryption_deterministic_key_secret_arn },
+        { name = "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT", valueFrom = var.active_record_encryption_key_derivation_salt_secret_arn },
         { name = "GITHUB_TOKEN", valueFrom = var.github_token_secret_arn }
       ]
       logConfiguration = {

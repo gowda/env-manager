@@ -30,5 +30,8 @@ db_allocated_storage = 20
 db_name              = "env_manager"
 db_username          = "envmanager"
 
-github_token_secret_name     = "env-manager/github-token"
-rails_master_key_secret_name = "env-manager/rails-master-key"
+github_token_secret_name                                 = "env-manager/github-token"
+secret_key_base_secret_name                              = "env-manager/secret-key-base"
+active_record_encryption_primary_key_secret_name         = "env-manager/active-record-encryption-primary-key"
+active_record_encryption_deterministic_key_secret_name   = "env-manager/active-record-encryption-deterministic-key"
+active_record_encryption_key_derivation_salt_secret_name = "env-manager/active-record-encryption-key-derivation-salt"

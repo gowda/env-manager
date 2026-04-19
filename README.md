@@ -50,14 +50,19 @@
 
 ## Production environment variables
 
-1. `RAILS_MASTER_KEY`
-2. `DB_HOST`
-3. `DB_PORT`
-4. `DB_USERNAME`
-5. `DB_PASSWORD`
-6. `DB_NAME`
-7. `RAILS_LOG_LEVEL`
-8. `FORCE_SSL`
+1. `SECRET_KEY_BASE`
+2. `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY`
+3. `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY`
+4. `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT`
+5. `DB_HOST`
+6. `DB_PORT`
+7. `DB_USERNAME`
+8. `DB_PASSWORD`
+9. `DB_NAME`
+10. `RAILS_LOG_LEVEL`
+11. `FORCE_SSL`
+
+The app now fails fast at boot if required secret environment variables are missing.
 
 ## S3 mapping cleanup contract
 

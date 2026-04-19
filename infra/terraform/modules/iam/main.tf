@@ -10,7 +10,19 @@ variable "github_token_secret_arn" {
   type = string
 }
 
-variable "rails_master_key_secret_arn" {
+variable "secret_key_base_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_primary_key_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_deterministic_key_secret_arn" {
+  type = string
+}
+
+variable "active_record_encryption_key_derivation_salt_secret_arn" {
   type = string
 }
 
@@ -71,7 +83,10 @@ data "aws_iam_policy_document" "task_inline" {
     ]
     resources = [
       var.github_token_secret_arn,
-      var.rails_master_key_secret_arn,
+      var.secret_key_base_secret_arn,
+      var.active_record_encryption_primary_key_secret_arn,
+      var.active_record_encryption_deterministic_key_secret_arn,
+      var.active_record_encryption_key_derivation_salt_secret_arn,
       var.db_password_secret_arn
     ]
   }

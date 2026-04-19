@@ -12,4 +12,10 @@
 - For prefix mappings, cleanup deletes only the canonical outbound object (`<prefix>/<outbound_identifier>.env`).
 - Do not implement or assume recursive prefix deletion unless product requirements explicitly change.
 
+## Secrets Policy
+
+- Do not implement new features or fixes using Rails credentials (`config/credentials*.yml.enc`) or `RAILS_MASTER_KEY`.
+- All runtime configuration and secret values must come from environment variables managed outside the app.
+- Prefer `ENV.fetch` for required secrets so boot fails fast when required values are missing.
+
 @AGENTS.local.md

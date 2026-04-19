@@ -39,9 +39,12 @@ module "s3" {
 }
 
 module "secrets" {
-  source                       = "./modules/secrets"
-  github_token_secret_name     = var.github_token_secret_name
-  rails_master_key_secret_name = var.rails_master_key_secret_name
+  source                                                   = "./modules/secrets"
+  github_token_secret_name                                 = var.github_token_secret_name
+  secret_key_base_secret_name                              = var.secret_key_base_secret_name
+  active_record_encryption_primary_key_secret_name         = var.active_record_encryption_primary_key_secret_name
+  active_record_encryption_deterministic_key_secret_name   = var.active_record_encryption_deterministic_key_secret_name
+  active_record_encryption_key_derivation_salt_secret_name = var.active_record_encryption_key_derivation_salt_secret_name
 }
 
 module "alb" {
@@ -67,33 +70,39 @@ module "rds" {
 }
 
 module "iam" {
-  source                      = "./modules/iam"
-  name_prefix                 = var.name_prefix
-  s3_bucket_arn               = module.s3.bucket_arn
-  github_token_secret_arn     = module.secrets.github_token_secret_arn
-  rails_master_key_secret_arn = module.secrets.rails_master_key_secret_arn
-  db_password_secret_arn      = module.rds.db_password_secret_arn
+  source                                                  = "./modules/iam"
+  name_prefix                                             = var.name_prefix
+  s3_bucket_arn                                           = module.s3.bucket_arn
+  github_token_secret_arn                                 = module.secrets.github_token_secret_arn
+  secret_key_base_secret_arn                              = module.secrets.secret_key_base_secret_arn
+  active_record_encryption_primary_key_secret_arn         = module.secrets.active_record_encryption_primary_key_secret_arn
+  active_record_encryption_deterministic_key_secret_arn   = module.secrets.active_record_encryption_deterministic_key_secret_arn
+  active_record_encryption_key_derivation_salt_secret_arn = module.secrets.active_record_encryption_key_derivation_salt_secret_arn
+  db_password_secret_arn                                  = module.rds.db_password_secret_arn
 }
 
 module "ecs" {
-  source                      = "./modules/ecs"
-  name_prefix                 = var.name_prefix
-  private_subnet_ids          = var.private_subnet_ids
-  service_security_group_id   = aws_security_group.ecs_service.id
-  app_port                    = var.app_port
-  desired_count               = var.desired_count
-  min_capacity                = var.min_capacity
-  max_capacity                = var.max_capacity
-  cpu                         = var.cpu
-  memory                      = var.memory
-  container_image             = var.container_image
-  target_group_arn            = module.alb.target_group_arn
-  task_execution_role_arn     = module.iam.task_execution_role_arn
-  task_role_arn               = module.iam.task_role_arn
-  db_host                     = module.rds.db_address
-  db_name                     = var.db_name
-  db_username                 = var.db_username
-  db_password_secret_arn      = module.rds.db_password_secret_arn
-  rails_master_key_secret_arn = module.secrets.rails_master_key_secret_arn
-  github_token_secret_arn     = module.secrets.github_token_secret_arn
+  source                                                  = "./modules/ecs"
+  name_prefix                                             = var.name_prefix
+  private_subnet_ids                                      = var.private_subnet_ids
+  service_security_group_id                               = aws_security_group.ecs_service.id
+  app_port                                                = var.app_port
+  desired_count                                           = var.desired_count
+  min_capacity                                            = var.min_capacity
+  max_capacity                                            = var.max_capacity
+  cpu                                                     = var.cpu
+  memory                                                  = var.memory
+  container_image                                         = var.container_image
+  target_group_arn                                        = module.alb.target_group_arn
+  task_execution_role_arn                                 = module.iam.task_execution_role_arn
+  task_role_arn                                           = module.iam.task_role_arn
+  db_host                                                 = module.rds.db_address
+  db_name                                                 = var.db_name
+  db_username                                             = var.db_username
+  db_password_secret_arn                                  = module.rds.db_password_secret_arn
+  github_token_secret_arn                                 = module.secrets.github_token_secret_arn
+  secret_key_base_secret_arn                              = module.secrets.secret_key_base_secret_arn
+  active_record_encryption_primary_key_secret_arn         = module.secrets.active_record_encryption_primary_key_secret_arn
+  active_record_encryption_deterministic_key_secret_arn   = module.secrets.active_record_encryption_deterministic_key_secret_arn
+  active_record_encryption_key_derivation_salt_secret_arn = module.secrets.active_record_encryption_key_derivation_salt_secret_arn
 }
