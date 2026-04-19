@@ -4,6 +4,10 @@ module Integrations
       client.put_object(bucket: bucket, key: key, body: body)
     end
 
+    def get_text(bucket:, key:)
+      client.get_object(bucket: bucket, key: key).body.read
+    end
+
     private
 
     def client
