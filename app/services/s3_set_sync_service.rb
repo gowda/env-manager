@@ -84,6 +84,9 @@ class S3SetSyncService
     return if mappings.empty?
 
     bucket = sync_bucket
+    # Destroy-time cleanup is best-effort and mapping-scoped.
+    # For prefix mappings, this deletes only the canonical outbound file
+    # (<prefix>/<outbound_identifier>.env), not every historical key under that prefix.
     mappings.find_each do |mapping|
       s3_client.delete_object(bucket: bucket, key: mapping.outbound_key)
     end

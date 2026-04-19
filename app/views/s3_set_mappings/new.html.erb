@@ -16,6 +16,8 @@
     <%= f.label :outbound_identifier, class: "form-label" %>
     <%= f.text_field :outbound_identifier, class: "form-control" %>
     <small class="text-body-secondary">Required for prefix mappings. Outbound key becomes <code>&lt;prefix&gt;/&lt;identifier&gt;.env</code>.</small>
+    <br>
+    <small class="text-body-secondary">Cleanup on set delete removes only this canonical outbound file per mapping (not recursive prefix cleanup of historical objects).</small>
   </div>
 
   <div class="form-check mb-3">

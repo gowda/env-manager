@@ -6,6 +6,8 @@ RSpec.describe "Apps", type: :request do
       get apps_path
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include(%(href="/assets/application))
+      expect(response.body).to include(%(src="/assets/application))
     end
   end
 

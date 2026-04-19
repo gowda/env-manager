@@ -18,5 +18,29 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.include FactoryBot::Syntax::Methods
 
+  config.before(:suite) do
+    required_assets = %w[application.js application.css].map { |file| Rails.root.join("app/assets/builds", file) }
+    next if required_assets.all?(&:exist?)
+
+    # Request/system specs render layout tags that resolve Propshaft assets.
+    # Build JS/CSS once in test mode when missing to avoid environment-specific layout branching.
+    unless Rails.root.join("node_modules/.bin/rollup").exist?
+      install_ok = system({ "RAILS_ENV" => "test" }, "yarn", "install", "--frozen-lockfile")
+      raise "Failed to install JS dependencies via `yarn install --frozen-lockfile`" unless install_ok
+    end
+
+    build_commands = [
+      ["yarn", "build"],
+      ["yarn", "build:css"]
+    ]
+
+    build_commands.each do |command|
+      success = system({ "RAILS_ENV" => "test" }, *command)
+      next if success
+
+      raise "Failed to build test assets via `#{command.join(' ')}`"
+    end
+  end
+
   config.filter_rails_from_backtrace!
 end
