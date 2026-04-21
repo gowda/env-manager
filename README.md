@@ -36,36 +36,19 @@
 3. Lint job runs RuboCop.
 4. Security job runs Brakeman and bundler-audit.
 
-## Production
+## Production runtime contract
 
-1. Runtime is designed for ECS Fargate with a single RDS PostgreSQL database.
+1. The app is deployment-target agnostic.
 2. Solid Queue, Solid Cache, and Solid Cable tables live in the same production database.
 3. Container listens on port `80`.
 4. Health endpoint is `/up`.
 
-## Deployment
+## Deployment examples
 
-1. Provision AWS infrastructure from [`infra/terraform`](/Users/gowda/supertiny/env-manager/infra/terraform).
-2. Set GitHub environment variables: `AWS_REGION`, `ECR_REPOSITORY`, `ECS_CLUSTER`, `ECS_SERVICE`
-3. Set GitHub environment secret: `AWS_DEPLOY_ROLE_ARN`
-4. Run the GitHub Actions `Deploy` workflow to build, push, and roll out a new ECS task definition.
+Deployment automation and infrastructure samples are intentionally maintained outside this repository.
 
-Terraform no longer provisions or reads AWS Secrets Manager values for app runtime configuration. ECS task definitions consume S3 environment files from `environment_file_object_arns` in the exact order provided.
-
-## Deployment runbook: S3 env-file hardening
-
-When using S3 environment files for runtime secrets, treat the bucket as a secrets store and enforce all controls below before deployment.
-
-1. Encryption at rest: enable `SSE-KMS` with a customer-managed KMS key (CMK). Do not rely on SSE-S3 defaults.
-2. Key policy: allow decrypt only to the ECS task execution role and required admin/break-glass roles.
-3. Bucket public exposure: enable all four S3 Public Access Block settings at account and bucket levels.
-4. Bucket policy read scope: allow `s3:GetObject` only for the specific env-file object ARNs and only to the ECS task execution role.
-5. Bucket policy transport guard: enforce TLS (`aws:SecureTransport = true`) and deny non-TLS requests.
-6. Bucket policy write scope: restrict `s3:PutObject`/`s3:DeleteObject` to trusted automation roles (for example CI/deploy role), not broad principals.
-7. Object versioning: enable bucket versioning to support rollback and incident recovery.
-8. Access logging: enable server access logging or CloudTrail data events for object-level read/write audit trails.
-9. Rotation runbook: define and rehearse secret rotation by writing new env-file object versions and forcing ECS deployment.
-10. Least-privilege review: regularly validate IAM and bucket policies to ensure no wildcard principals or broad object access.
+1. AWS deployment sample repository: [`env-manager-aws`](https://github.com/gowda/env-manager-aws)
+2. Users are expected to manage infrastructure and rollout workflows in their own deployment repositories.
 
 ## Production environment variables
 

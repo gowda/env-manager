@@ -28,16 +28,3 @@
 *.swp
 *.swo
 TODO.md
-
-/infra/terraform/.terraform/
-/infra/terraform/*.tfstate
-/infra/terraform/*.tfstate.*
-/infra/terraform/crash.log
-/infra/terraform/crash.*.log
-/infra/terraform/override.tf
-/infra/terraform/override.tf.json
-/infra/terraform/*_override.tf
-/infra/terraform/*_override.tf.json
-/infra/terraform/.terraform.tfstate.lock.info
-/infra/terraform/envs/*.tfvars
-!/infra/terraform/envs/*.tfvars.example

@@ -18,4 +18,10 @@
 - All runtime configuration and secret values must come from environment variables managed outside the app.
 - Prefer `ENV.fetch` for required secrets so boot fails fast when required values are missing.
 
+## Deployment Ownership
+
+- Do not add cloud-specific IaC or deployment pipeline automation to this repository.
+- Keep this repository deployment-target agnostic.
+- Publish platform-specific deployment samples in companion repositories (for example `env-manager-aws`).
+
 @AGENTS.local.md
