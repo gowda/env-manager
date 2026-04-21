@@ -1,4 +1,6 @@
 # Env Manager
+[![CI](https://github.com/gowda/env-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/gowda/env-manager/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/gowda/env-manager/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/gowda/env-manager/actions/workflows/github-code-scanning/codeql)
 
 ## Runtime
 
