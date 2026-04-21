@@ -20,4 +20,15 @@ Rails.application.configure do
   config.i18n.fallbacks = true
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [:id]
+
+  # assets:precompile uses SECRET_KEY_BASE_DUMMY=1. Runtime must always provide
+  # real secret values through environment variables.
+  precompile_mode = ENV["SECRET_KEY_BASE_DUMMY"] == "1"
+
+  unless precompile_mode
+    config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
+    config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY")
+    config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY")
+    config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT")
+  end
 end

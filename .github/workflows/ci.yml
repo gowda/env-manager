@@ -58,6 +58,17 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set Rails runtime secret env
+        shell: bash
+        run: |
+          ruby <<'RUBY' >> "$GITHUB_ENV"
+          require "securerandom"
+          puts "SECRET_KEY_BASE=#{SecureRandom.hex(64)}"
+          puts "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=#{SecureRandom.hex(32)}"
+          puts "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=#{SecureRandom.hex(32)}"
+          puts "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=#{SecureRandom.hex(32)}"
+          RUBY
+
       - name: Prepare database
         run: bin/rails db:prepare
 

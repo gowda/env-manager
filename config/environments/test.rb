@@ -17,7 +17,8 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
   config.action_controller.raise_on_missing_callback_actions = true
 
-  config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY", "test_primary_key_32_chars_minimum_value_1")
-  config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY", "test_deterministic_key_32_chars_min_2")
-  config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT", "test_key_derivation_salt_32_chars_min_3")
+  config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
+  config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY")
+  config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY")
+  config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT")
 end

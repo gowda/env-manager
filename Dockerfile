@@ -45,7 +45,8 @@ COPY . .
 
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
-RUN SECRET_KEY_BASE_DUMMY=1 SKIP_YARN_INSTALL=1 DB_NAME=dummy ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 \
+    SKIP_YARN_INSTALL=1 DB_NAME=dummy ./bin/rails assets:precompile
 
 RUN rm -rf node_modules
 

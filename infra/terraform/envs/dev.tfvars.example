@@ -29,6 +29,9 @@ db_instance_class    = "db.t4g.micro"
 db_allocated_storage = 20
 db_name              = "env_manager"
 db_username          = "envmanager"
+db_password          = "replace-with-secure-db-password"
 
-github_token_secret_name     = "env-manager/github-token"
-rails_master_key_secret_name = "env-manager/rails-master-key"
+environment_file_object_arns = [
+  "arn:aws:s3:::env-manager/app/common.env",
+  "arn:aws:s3:::env-manager/app/dev.env"
+]
